@@ -13,26 +13,19 @@
         .btn-signup { background: #007bff; }
         .btn-view { background: #6f42c1; }
         .btn-upload { background: #dc3545; }
-        
         #dashboard-section { display: none; }
         .divider { margin: 20px 0; border-top: 1px solid #ddd; }
-        
-        #suggestions-list { margin-top: 15px; text-align: left; }
-        .suggestion-card { background: #e9ecef; padding: 15px; border-radius: 5px; margin-bottom: 15px; border-left: 4px solid #6f42c1; }
-        .suggestion-card p { margin: 0; color: #333; white-space: pre-wrap; font-size: 15px; line-height: 1.4; }
-        .suggestion-card img { max-width: 100%; margin-top: 10px; border-radius: 5px; border: 1px solid #ccc; }
-        
+        .suggestion-card { background: #e9ecef; padding: 15px; border-radius: 5px; margin-bottom: 15px; border-left: 4px solid #6f42c1; text-align: left; }
+        .suggestion-card img { max-width: 100%; margin-top: 10px; border-radius: 5px; }
         .file-upload-wrapper { margin: 10px 0; text-align: left; padding: 0 5%; }
-        .file-upload-wrapper label { font-size: 14px; color: #555; font-weight: bold; }
-        input[type="file"] { border: none; padding: 5px 0; }
     </style>
 </head>
 <body>
 
     <div class="box" id="auth-section">
         <h2>রাষ্ট্রবিজ্ঞান সাজেশন</h2>
-        <input type="text" id="username" placeholder="ইউজারনেম (ইংরেজিতে)" required>
-        <input type="password" id="password" placeholder="পাসওয়ার্ড (৬ অক্ষর)" required>
+        <input type="text" id="username" placeholder="ইউজারনেম" required>
+        <input type="password" id="password" placeholder="পাসওয়ার্ড" required>
         <button class="btn-login" onclick="loginUser()">লগইন করুন</button>
         <button class="btn-signup" onclick="signUpUser()">নতুন একাউন্ট খুলুন</button>
         <p id="auth-msg" style="font-size: 14px; margin-top: 15px; font-weight: bold;"></p>
@@ -40,38 +33,26 @@
 
     <div class="box" id="dashboard-section">
         <h2>স্বাগতম!</h2>
-        
-        <!-- বর্ষ সিলেক্ট -->
         <select id="year-select" onchange="updateCourses()">
             <option value="">বর্ষ সিলেক্ট করুন</option>
             <option value="1st">প্রথম বর্ষ</option>
             <option value="2nd">দ্বিতীয় বর্ষ</option>
             <option value="3rd">তৃতীয় বর্ষ</option>
-            <option value="4th">চর্থ বর্ষ</option>
+            <option value="4th">চতুর্থ বর্ষ</option>
         </select>
-
-        <!-- কোর্স সিলেক্ট -->
         <select id="course-select">
             <option value="">আগে বর্ষ সিলেক্ট করুন</option>
         </select>
-
         <div class="divider"></div>
-
-        <h3 style="color: #dc3545; margin-bottom: 5px; font-size: 16px;">সাজেশন যোগ করুন</h3>
-        <textarea id="suggestion-text" rows="3" placeholder="এখানে তোমার সাজেশন লেখো..."></textarea>
-        
+        <textarea id="suggestion-text" rows="3" placeholder="সাজেশন বা মন্তব্য লেখো..."></textarea>
         <div class="file-upload-wrapper">
-            <label for="suggestion-img">ছবি যোগ করুন (ঐচ্ছিক):</label>
-            <input type="file" id="suggestion-img" accept="image/*">
+            <label>ছবি বা পিডিএফ ফাইল:</label>
+            <input type="file" id="suggestion-file" accept="image/*, application/pdf, .html">
         </div>
-
         <button class="btn-upload" onclick="uploadData()">সাজেশন সেভ করুন</button>
-        <p id="upload-msg" style="font-size: 14px; font-weight: bold; margin-top: 5px;"></p>
-
+        <p id="upload-msg" style="font-size: 14px; font-weight: bold;"></p>
         <div class="divider"></div>
-
         <button class="btn-view" onclick="viewSuggestions()">সাজেশন দেখুন</button>
-        
         <div id="suggestions-list"></div>
     </div>
 
@@ -79,7 +60,6 @@
         const supabaseUrl = 'https://fmaupjtupbfbsekrrrip.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtYXVwanR1cGJmYnNla3JycmlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1NjU5MjAsImV4cCI6MjA5ODE0MTkyMH0.S_hzuZNQB8Kfw1BHwRMQChjJClo1E4RvyrQKBRBFe7I';
 
-        // কোর্সের নামগুলো এখানে সেট করা হলো
         const courseData = {
             "1st": ["Introduction to Political Science", "Political History of Bengal", "Major Foreign Governments"],
             "2nd": ["ব্রিটিশ ভারতের রাজনৈতিক ও সাংবিধানিক উন্নয়ন (২২১৯০১)", "বাংলাদেশের রাজনৈতিক অর্থনীতি (২২১৯০৩)", "রাজনীতি ও উন্নয়নে নারী (২২১৯০৫)", "প্রাচ্যের রাষ্ট্রচিন্তা (২২১৯০৭)", "বাংলাদেশের অর্থনীতি (২২২২০৯)", "বাংলাদেশের সমাজ ও সংস্কৃতি (২২২১১৫)", "Compulsory English"],
@@ -92,77 +72,58 @@
             const courseSelect = document.getElementById("course-select");
             courseSelect.innerHTML = "";
             if (courseData[year]) {
-                courseData[year].forEach(course => {
+                courseData[year].forEach(c => {
                     let opt = document.createElement("option");
-                    opt.value = course;
-                    opt.innerText = course;
+                    opt.value = c; opt.innerText = c;
                     courseSelect.appendChild(opt);
                 });
             }
         }
 
-        // বাকি ফাংশনগুলো আগের মতোই থাকবে...
-        function showMsg(id, text, color) { const msgObj = document.getElementById(id); msgObj.innerHTML = text; msgObj.style.color = color; }
+        function showMsg(id, text, color) { document.getElementById(id).innerText = text; document.getElementById(id).style.color = color; }
 
         async function loginUser() {
             const user = document.getElementById("username").value.trim();
             const pass = document.getElementById("password").value;
-            try {
-                const response = await fetch(`${supabaseUrl}/auth/v1/token?grant_type=password`, {
-                    method: 'POST',
-                    headers: { 'apikey': supabaseKey, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: user.toLowerCase() + "@polsci.app", password: pass })
-                });
-                if (response.ok) {
-                    document.getElementById("auth-section").style.display = "none";
-                    document.getElementById("dashboard-section").style.display = "block";
-                } else alert("লগইন ভুল!");
-            } catch (err) { alert("নেটওয়ার্ক এরর!"); }
+            const res = await fetch(`${supabaseUrl}/auth/v1/token?grant_type=password`, { method: 'POST', headers: { 'apikey': supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify({ email: user.toLowerCase() + "@polsci.app", password: pass }) });
+            if (res.ok) { document.getElementById("auth-section").style.display = "none"; document.getElementById("dashboard-section").style.display = "block"; }
+            else alert("ভুল ইউজারনেম বা পাসওয়ার্ড!");
         }
 
         async function uploadData() {
             const year = document.getElementById("year-select").value;
             const course = document.getElementById("course-select").value;
-            const text = document.getElementById("suggestion-text").value.trim();
-            const imgFile = document.getElementById("suggestion-img").files[0];
-            
-            let finalImageUrl = "";
-            if (imgFile) {
-                const fileName = Date.now() + "_" + imgFile.name;
-                const uploadResponse = await fetch(`${supabaseUrl}/storage/v1/object/images/${fileName}`, {
-                    method: 'POST',
-                    headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': imgFile.type },
-                    body: imgFile
-                });
-                if (uploadResponse.ok) finalImageUrl = `${supabaseUrl}/storage/v1/object/public/images/${fileName}`;
+            const text = document.getElementById("suggestion-text").value;
+            const file = document.getElementById("suggestion-file").files[0];
+            let fileUrl = "";
+
+            if (file) {
+                const res = await fetch(`${supabaseUrl}/storage/v1/object/images/${Date.now()}_${file.name}`, { method: 'POST', headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': file.type }, body: file });
+                if (res.ok) fileUrl = res.url.replace('/v1/object/images/', '/v1/object/public/images/');
             }
 
-            const dbResponse = await fetch(`${supabaseUrl}/rest/v1/materials`, {
-                method: 'POST',
-                headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-                body: JSON.stringify({ year, course_name: course, content_type: imgFile ? 'image' : 'text', content_text: text, image_url: finalImageUrl })
-            });
-
-            if(dbResponse.ok) showMsg("upload-msg", "সেভ হয়েছে!", "green");
+            const dbRes = await fetch(`${supabaseUrl}/rest/v1/materials`, { method: 'POST', headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify({ year, course_name: course, content_text: text, image_url: fileUrl }) });
+            if (dbRes.ok) showMsg("upload-msg", "সেভ হয়েছে!", "green");
             else showMsg("upload-msg", "সেভ করতে সমস্যা!", "red");
         }
 
         async function viewSuggestions() {
             const year = document.getElementById("year-select").value;
             const course = document.getElementById("course-select").value;
-            const fetchUrl = `${supabaseUrl}/rest/v1/materials?year=eq.${year}&course_name=eq.${encodeURIComponent(course)}&select=*`;
-            const response = await fetch(fetchUrl, { method: 'GET', headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json' } });
-            
-            if(response.ok) {
-                const data = await response.json();
-                let html = "";
-                data.forEach(item => {
-                    html += `<div class="suggestion-card">${item.content_text ? `<p>${item.content_text}</p>` : ""}${item.image_url ? `<img src="${item.image_url}">` : ""}</div>`;
-                });
-                document.getElementById("suggestions-list").innerHTML = html;
-            }
+            const res = await fetch(`${supabaseUrl}/rest/v1/materials?year=eq.${year}&course_name=eq.${encodeURIComponent(course)}&select=*`, { headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` } });
+            const data = await res.json();
+            let html = "";
+            data.forEach(item => {
+                html += `<div class="suggestion-card"><p>${item.content_text}</p>`;
+                if (item.image_url) {
+                    if (item.image_url.match(/\.(pdf|html)$/i)) html += `<a href="${item.image_url}" target="_blank">📄 ফাইলটি দেখুন</a>`;
+                    else html += `<img src="${item.image_url}">`;
+                }
+                html += `</div>`;
+            });
+            document.getElementById("suggestions-list").innerHTML = html;
         }
-        
+
         async function signUpUser() { /* আগের মতোই */ }
     </script>
 </body>
