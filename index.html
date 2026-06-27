@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>রাষ্ট্রবিজ্ঞান সাজেশন - লগইন</title>
+    <!-- Supabase লাইব্রেরি যুক্ত করা হলো -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+  
+  </script>
+    
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1); width: 90%; max-width: 350px; text-align: center; }
+        input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
+        button { width: 95%; padding: 10px; margin: 5px 0; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; color: white; }
+        .btn-login { background-color: #28a745; }
+        .btn-signup { background-color: #007bff; }
+    </style>
+</head>
+<body>
+
+    <div class="login-box">
+        <h2>রাষ্ট্রবিজ্ঞান সাজেশন</h2>
+        <p>লগইন বা নতুন একাউন্ট খুলুন</p>
+        
+        <input type="text" id="username" placeholder="যেকোনো ইউজারনেম (ইংরেজিতে)" required>
+        <input type="password" id="password" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)" required>
+        
+        <button class="btn-login" onclick="loginUser()">লগইন করুন</button>
+        <button class="btn-signup" onclick="signUpUser()">নতুন একাউন্ট খুলুন</button>
+        
+        <p id="message" style="color: red; font-size: 14px; mt-2"></p>
+    </div>
+
+    <script>
+  
+  alert("জাভাস্ক্রিপ্ট ঠিকমতো কাজ করছে!");
+
+  
+  
+        // এখানে তোমার Supabase এর তথ্য দাও
+        const supabaseUrl = 'https://fmaupjtupbfbsekrrrip.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtYXVwanR1cGJmYnNla3JycmlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1NjU5MjAsImV4cCI6MjA5ODE0MTkyMH0.S_hzuZNQB8Kfw1BHwRMQChjJClo1E4RvyrQKBRBFe7I';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        // মেসেজ দেখানোর ফাংশন
+        function showMessage(text, color="red") {
+            const msg = document.getElementById('message');
+            msg.innerText = text;
+            msg.style.color = color;
+        }
+
+        // সাইন আপ ফাংশন
+        async function signUpUser() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value;
+
+            if(user.length < 3 || pass.length < 6) {
+                return showMessage("ইউজারনেম অন্তত ৩ এবং পাসওয়ার্ড ৬ অক্ষরের হতে হবে!");
+            }
+
+            showMessage("একাউন্ট তৈরি হচ্ছে...", "blue");
+            const fakeEmail = user.toLowerCase() + "@polsci.app"; // লুকানো ইমেইল ট্রিক
+
+            const { data, error } = await supabase.auth.signUp({
+                email: fakeEmail,
+                password: pass
+            });
+
+            if (error) {
+                showMessage("এরর: " + error.message);
+            } else {
+                showMessage("একাউন্ট সফলভাবে তৈরি হয়েছে! এবার লগইন করুন।", "green");
+            }
+        }
+
+        // লগইন ফাংশন
+        async function loginUser() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value;
+
+            if(user === "" || pass === "") return showMessage("ইউজারনেম এবং পাসওয়ার্ড দিন!");
+
+            showMessage("লগইন হচ্ছে...", "blue");
+            const fakeEmail = user.toLowerCase() + "@polsci.app"; // লুকানো ইমেইল ট্রিক
+
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: fakeEmail,
+                password: pass
+            });
+
+            if (error) {
+                showMessage("ইউজারনেম বা পাসওয়ার্ড ভুল হয়েছে!");
+            } else {
+                showMessage("লগইন সফল!", "green");
+                // লগইন সফল হলে ড্যাশবোর্ডে নিয়ে যাবে (এটি আমরা পরের ধাপে বানাবো)
+                setTimeout(() => {
+                    alert("লগইন সফল! পরের পেজে যাওয়ার কোড এখনো লিখিনি।");
+                }, 1000);
+            }
+        }
+    </script>
+
+</body>
+</html>
