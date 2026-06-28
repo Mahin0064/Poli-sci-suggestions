@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>রাষ্ট্রবিজ্ঞান সাজেশন অ্যাপ</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
-        input, select, textarea { padding: 10px; margin: 10px 0; width: 90%; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; font-family: inherit; box-sizing: border-box; }
-        button { padding: 10px; margin: 5px 0; width: 95%; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; color: white; font-family: inherit; }
+        /* ডিফল্ট থিম (Light Mode) */
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; transition: background 0.3s; }
+        .box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; transition: background 0.3s, color 0.3s; position: relative; }
+        input, select, textarea { padding: 10px; margin: 10px 0; width: 90%; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; font-family: inherit; box-sizing: border-box; transition: 0.3s; }
+        button { padding: 10px; margin: 5px 0; width: 95%; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; color: white; font-family: inherit; transition: 0.2s; }
         
         .btn-login { background: #28a745; }
         .btn-signup { background: #007bff; }
@@ -16,26 +17,58 @@
         .btn-upload { background: #dc3545; }
         .btn-delete { background: #ff4d4d; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-top: 10px; width: auto; }
         
-        #dashboard-section { display: none; }
+        /* ছোট শেয়ার ও কপি বাটন */
+        .btn-small-action { background: #e0e0e0; color: #333; padding: 6px 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; margin-right: 5px; margin-top: 10px; font-weight: bold; transition: 0.3s; width: auto; display: inline-block; }
+        .btn-small-action:hover { background: #d0d0d0; }
+        
+        /* স্প্ল্যাশ স্ক্রিন (Splash Screen) */
+        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #6f42c1; color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease; }
+        #splash-screen h1 { font-size: 28px; margin-bottom: 10px; }
+        
+        #auth-section, #dashboard-section { display: none; }
         .divider { margin: 20px 0; border-top: 1px solid #ddd; }
         
-        .suggestion-card { background: #e9ecef; padding: 15px; border-radius: 5px; margin-bottom: 15px; border-left: 4px solid #6f42c1; text-align: left; }
+        .suggestion-card { background: #e9ecef; padding: 15px; border-radius: 5px; margin-bottom: 15px; border-left: 4px solid #6f42c1; text-align: left; transition: 0.3s; }
         .suggestion-card img { max-width: 100%; margin-top: 10px; border-radius: 5px; }
         .file-upload-wrapper { margin: 10px 0; text-align: left; padding: 0 5%; }
         
-        /* নতুন বাটন লেআউটের ডিজাইন */
         .btn-action-container { display: flex; justify-content: space-between; gap: 10px; margin-top: 15px; }
         .btn-preview { background: #17a2b8; color: white; padding: 8px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; flex: 1; font-size: 14px; }
         .btn-fullscreen { background: #28a745; color: white; padding: 8px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; text-align: center; text-decoration: none; flex: 1; font-size: 14px; box-sizing: border-box; display: inline-block; }
-        .btn-fullscreen:hover, .btn-preview:hover { opacity: 0.9; }
-        
-        /* ফ্রেমের ডিজাইন */
         .frame-container iframe { width: 100%; height: 350px; border: 1px solid #ccc; border-radius: 5px; margin-top: 10px; background: white; }
+
+        /* ডার্ক মোড (Dark Mode) */
+        body.dark-mode { background-color: #121212; color: #ffffff; }
+        body.dark-mode .box { background: #1e1e1e; color: #ffffff; box-shadow: 0 4px 10px rgba(255,255,255,0.05); }
+        body.dark-mode input, body.dark-mode select, body.dark-mode textarea { background: #333; color: white; border-color: #555; }
+        body.dark-mode .suggestion-card { background: #2d2d2d; color: white; border-left: 4px solid #bb86fc; }
+        body.dark-mode .suggestion-card p, body.dark-mode .suggestion-card span { color: #ddd !important; }
+        body.dark-mode .divider { border-top: 1px solid #444; }
+        body.dark-mode .dev-text { color: #aaa !important; border-top-color: #444 !important; }
+        body.dark-mode .btn-small-action { background: #444; color: #ddd; }
+        body.dark-mode .btn-small-action:hover { background: #555; }
+        
+        .dark-toggle { position: absolute; top: 15px; right: 15px; background: transparent; border: none; font-size: 20px; cursor: pointer; width: auto; color: inherit; padding: 0; }
+
+        /* লোডিং স্পিনার */
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #6f42c1; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; display: none; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* সার্চ বক্স */
+        #search-box { display: none; width: 90%; padding: 10px; margin-top: 15px; border-radius: 20px; border: 1px solid #ccc; font-size: 15px; text-align: center; }
+        #offline-alert { display: none; color: #dc3545; font-size: 13px; font-weight: bold; margin-top: 10px; }
     </style>
 </head>
 <body>
 
+    <!-- স্প্ল্যাশ স্ক্রিন -->
+    <div id="splash-screen">
+        <h1>রাষ্ট্রবিজ্ঞান সাজেশন</h1>
+        <div class="loader" style="display: block; border-top-color: white; border-width: 3px; width: 25px; height: 25px;"></div>
+    </div>
+
     <div class="box" id="auth-section">
+        <button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
         <h2>রাষ্ট্রবিজ্ঞান সাজেশন</h2>
         <input type="text" id="username" placeholder="ইউজারনেম (ইংরেজিতে)" required>
         <input type="password" id="password" placeholder="পাসওয়ার্ড" required>
@@ -43,12 +76,13 @@
         <button class="btn-signup" onclick="signUpUser()">নতুন একাউন্ট খুলুন</button>
         <p id="auth-msg" style="font-size: 14px; margin-top: 15px; font-weight: bold;"></p>
         
-        <div style="margin-top: 25px; padding-top: 15px; border-top: 1px dashed #ccc; font-size: 14px; color: #555;">
+        <div class="dev-text" style="margin-top: 25px; padding-top: 15px; border-top: 1px dashed #ccc; font-size: 14px; color: #555;">
             Developed by <strong style="color: #6f42c1; font-size: 16px;">Mahim</strong>
         </div>
     </div>
 
     <div class="box" id="dashboard-section">
+        <button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
         <h2>স্বাগতম!</h2>
         <select id="year-select" onchange="updateCourses()">
             <option value="">বর্ষ সিলেক্ট করুন</option>
@@ -62,12 +96,11 @@
         </select>
         <div class="divider"></div>
         
-        <!-- এই অংশটুকু শুধু Admin (Mahim) দেখতে পাবে -->
         <div id="admin-upload-section" style="display: none;">
             <h3 style="color: #dc3545; margin-bottom: 5px; font-size: 16px;">সাজেশন যোগ করুন (Admin)</h3>
             <textarea id="suggestion-text" rows="3" placeholder="সাজেশন বা মন্তব্য লেখো..."></textarea>
             <div class="file-upload-wrapper">
-                <label style="font-size:14px; color:#555; font-weight:bold;">ছবি বা ফাইল (PDF, HTML, TXT):</label>
+                <label style="font-size:14px; font-weight:bold;">ছবি বা ফাইল (PDF, HTML, TXT):</label>
                 <input type="file" id="suggestion-file" accept="image/*, application/pdf, .html, .txt">
             </div>
             <button class="btn-upload" onclick="uploadData()">সাজেশন সেভ করুন</button>
@@ -76,15 +109,19 @@
         </div>
 
         <button class="btn-view" onclick="viewSuggestions()">সাজেশন দেখুন</button>
+        <p id="offline-alert">⚠️ ইন্টারনেট নেই! সেভ করা অফলাইন ডেটা দেখানো হচ্ছে।</p>
+        
+        <input type="text" id="search-box" placeholder="🔍 নির্দিষ্ট সাজেশন খুঁজুন..." onkeyup="searchSuggestions()">
+        <div class="loader" id="loading-spinner"></div>
         <div id="suggestions-list"></div>
     </div>
 
-    <script>
+    
+        <script>
         const supabaseUrl = 'https://fmaupjtupbfbsekrrrip.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtYXVwanR1cGJmYnNla3JycmlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1NjU5MjAsImV4cCI6MjA5ODE0MTkyMH0.S_hzuZNQB8Kfw1BHwRMQChjJClo1E4RvyrQKBRBFe7I';
 
-        // নতুন পাসওয়ার্ড সেট করা হলো
-        const MY_SECRET_PASSWORD = "professor";
+        const MY_SECRET_PASSWORD = "প্রফেসর";
         let loggedInUser = ""; 
 
         const courseData = {
@@ -94,6 +131,65 @@
             "4th": ["Modern Political Thought", "Local Government & Rural Development", "Public Policy", "International Law"]
         };
 
+        // স্প্ল্যাশ স্ক্রিন (Splash Screen) কন্ট্রোল
+        window.onload = function() {
+            setTimeout(function() {
+                document.getElementById('splash-screen').style.opacity = '0';
+                setTimeout(function() {
+                    document.getElementById('splash-screen').style.display = 'none';
+                    document.getElementById('auth-section').style.display = 'block';
+                }, 500); 
+            }, 2000); 
+        };
+
+        // ডার্ক মোড কন্ট্রোল
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+            const btns = document.querySelectorAll('.dark-toggle');
+            if(document.body.classList.contains("dark-mode")) {
+                btns.forEach(btn => btn.innerText = "☀️");
+            } else {
+                btns.forEach(btn => btn.innerText = "🌙");
+            }
+        }
+
+        // সার্চ বক্স কন্ট্রোল
+        function searchSuggestions() {
+            let filter = document.getElementById('search-box').value.toLowerCase();
+            let cards = document.getElementsByClassName('suggestion-card');
+            
+            for (let i = 0; i < cards.length; i++) {
+                let text = cards[i].innerText.toLowerCase();
+                if (text.includes(filter)) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+
+        // টেক্সট কপি করার ফাংশন
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert("✅ টেক্সট কপি করা হয়েছে!");
+            }).catch(err => {
+                alert("কপি করতে সমস্যা হয়েছে!");
+            });
+        }
+
+        // শেয়ার করার ফাংশন (Web Share API)
+        function shareContent(text, url) {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'রাষ্ট্রবিজ্ঞান সাজেশন',
+                    text: text ? text.substring(0, 100) + "...\n\n" : "এখানে একটি সাজেশন শেয়ার করা হয়েছে!\n",
+                    url: url || window.location.href
+                }).catch(err => console.log("Share failed:", err));
+            } else {
+                alert("আপনার ব্রাউজারে শেয়ার অপশন সাপোর্ট করে না!");
+            }
+        }
+
         window.addEventListener("popstate", function(event) {
             if (document.getElementById("dashboard-section").style.display === "block") {
                 const exit = confirm("তুমি কি লগআউট করে বের হতে চাও?");
@@ -102,6 +198,9 @@
                 } else {
                     document.getElementById("dashboard-section").style.display = "none";
                     document.getElementById("auth-section").style.display = "block";
+                    document.getElementById("search-box").style.display = "none";
+                    document.getElementById("suggestions-list").innerHTML = "";
+                    document.getElementById("offline-alert").style.display = "none";
                     loggedInUser = ""; 
                 }
             }
@@ -128,16 +227,10 @@
             const res = await fetch(`${supabaseUrl}/auth/v1/token?grant_type=password`, { method: 'POST', headers: { 'apikey': supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify({ email: user.toLowerCase() + "@polsci.app", password: pass }) });
             if (res.ok) { 
                 loggedInUser = user.toLowerCase(); 
-                
                 document.getElementById("auth-section").style.display = "none"; 
                 document.getElementById("dashboard-section").style.display = "block"; 
-
-                if (loggedInUser === "mahim") {
-                    document.getElementById("admin-upload-section").style.display = "block";
-                } else {
-                    document.getElementById("admin-upload-section").style.display = "none";
-                }
-
+                if (loggedInUser === "mahim") { document.getElementById("admin-upload-section").style.display = "block"; } 
+                else { document.getElementById("admin-upload-section").style.display = "none"; }
                 history.pushState(null, null, window.location.href); 
             }
             else alert("ভুল ইউজারনেম বা পাসওয়ার্ড!");
@@ -153,7 +246,6 @@
 
         async function uploadData() {
             if (loggedInUser !== "mahim") return; 
-
             const year = document.getElementById("year-select").value;
             const course = document.getElementById("course-select").value;
             const text = document.getElementById("suggestion-text").value;
@@ -167,82 +259,54 @@
                 if (file) {
                     const safeFileName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
                     const fileName = Date.now() + "_" + safeFileName;
-                    
                     let finalContentType = file.type || 'application/octet-stream';
                     if (safeFileName.toLowerCase().endsWith('.html')) finalContentType = 'text/html; charset=utf-8';
                     else if (safeFileName.toLowerCase().endsWith('.txt')) finalContentType = 'text/plain; charset=utf-8';
                     
                     const res = await fetch(`${supabaseUrl}/storage/v1/object/images/${fileName}`, { 
-                        method: 'POST', 
-                        headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': finalContentType }, 
-                        body: file 
+                        method: 'POST', headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': finalContentType }, body: file 
                     });
-                    
-                    if (res.ok) {
-                        fileUrl = `${supabaseUrl}/storage/v1/object/public/images/${fileName}`;
-                    } else {
-                        return showMsg("upload-msg", "ফাইল আপলোডে সমস্যা!", "red");
-                    }
+                    if (res.ok) { fileUrl = `${supabaseUrl}/storage/v1/object/public/images/${fileName}`; } 
+                    else { return showMsg("upload-msg", "ফাইল আপলোডে সমস্যা!", "red"); }
                 }
 
                 const dbRes = await fetch(`${supabaseUrl}/rest/v1/materials`, { 
-                    method: 'POST', 
-                    headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, 
+                    method: 'POST', headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, 
                     body: JSON.stringify({ year, course_name: course, content_text: text, image_url: fileUrl }) 
                 });
-                
                 if (dbRes.ok) {
                     showMsg("upload-msg", "সফলভাবে সেভ হয়েছে!", "green");
                     document.getElementById("suggestion-text").value = "";
                     document.getElementById("suggestion-file").value = "";
-                } else {
-                    showMsg("upload-msg", "সেভ করতে সমস্যা!", "red");
-                }
-            } catch (error) {
-                showMsg("upload-msg", "নেটওয়ার্ক এরর!", "red");
-            }
+                } else { showMsg("upload-msg", "সেভ করতে সমস্যা!", "red"); }
+            } catch (error) { showMsg("upload-msg", "নেটওয়ার্ক এরর!", "red"); }
         }
 
-        // এইচটিএমএল/টেক্সট ফ্রেম লোড করার ফাংশন
         async function loadContent(containerId, url, type) {
             const container = document.getElementById(containerId);
-            container.innerHTML = `<p style="color:blue; font-size:14px; text-align:center;">লোড হচ্ছে...</p>`;
+            container.innerHTML = `<div class="loader" style="display:block;"></div>`;
             try {
                 const response = await fetch(url);
                 const text = await response.text();
-                
                 const mimeType = type === 'html' ? 'text/html; charset=utf-8' : 'text/plain; charset=utf-8';
                 const blob = new Blob([text], { type: mimeType });
                 const blobUrl = URL.createObjectURL(blob);
-                
                 container.innerHTML = `<iframe src="${blobUrl}"></iframe>`;
-            } catch (error) {
-                container.innerHTML = `<iframe src="${url}"></iframe>`;
-            }
+            } catch (error) { container.innerHTML = `<iframe src="${url}"></iframe>`; }
         }
 
         async function openFullScreenContent(url, type) {
             const newTab = window.open('', '_blank');
-            if (!newTab) {
-                alert("দয়া করে আপনার ব্রাউজারের পপ-আপ ব্লকার (Pop-up Blocker) বন্ধ করুন!");
-                return;
-            }
-            newTab.document.write("<h3 style='font-family:sans-serif; color:blue; text-align:center; margin-top:50px;'>লোড হচ্ছে... দয়া করে অপেক্ষা করুন।</h3>");
-            
+            if (!newTab) { alert("দয়া করে আপনার ব্রাউজারের পপ-আপ ব্লকার (Pop-up Blocker) বন্ধ করুন!"); return; }
+            newTab.document.write("<h3 style='font-family:sans-serif; color:blue; text-align:center; margin-top:50px;'>লোড হচ্ছে...</h3>");
             try {
                 const response = await fetch(url);
                 const text = await response.text();
-                
                 newTab.document.open();
-                if (type === 'html') {
-                    newTab.document.write(text);
-                } else {
-                    newTab.document.write("<pre style='word-wrap: break-word; white-space: pre-wrap; font-family: sans-serif; padding: 20px; font-size: 16px;'>" + text + "</pre>");
-                }
+                if (type === 'html') { newTab.document.write(text); } 
+                else { newTab.document.write("<pre style='word-wrap: break-word; white-space: pre-wrap; font-family: sans-serif; padding: 20px; font-size: 16px;'>" + text + "</pre>"); }
                 newTab.document.close();
-            } catch (error) {
-                newTab.location.href = url;
-            }
+            } catch (error) { newTab.location.href = url; }
         }
 
         async function viewSuggestions() {
@@ -250,45 +314,82 @@
             const course = document.getElementById("course-select").value;
             if(!year || !course) return alert("বর্ষ ও কোর্স সিলেক্ট করুন!");
             
-            document.getElementById("suggestions-list").innerHTML = "<p style='color:blue; text-align:center;'>লোড হচ্ছে...</p>";
+            document.getElementById("suggestions-list").innerHTML = "";
+            document.getElementById("search-box").style.display = "none";
+            document.getElementById("loading-spinner").style.display = "block";
+            document.getElementById("offline-alert").style.display = "none";
             
-            const res = await fetch(`${supabaseUrl}/rest/v1/materials?year=eq.${year}&course_name=eq.${encodeURIComponent(course)}&select=*`, { headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` } });
-            const data = await res.json();
+            const cacheKey = `suggestions_${year}_${course}`;
+            let data = [];
+
+            // অফলাইন/অনলাইন চেক করা হচ্ছে
+            if (navigator.onLine) {
+                try {
+                    const res = await fetch(`${supabaseUrl}/rest/v1/materials?year=eq.${year}&course_name=eq.${encodeURIComponent(course)}&select=*`, { headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` } });
+                    data = await res.json();
+                    localStorage.setItem(cacheKey, JSON.stringify(data)); // অফলাইনের জন্য সেভ করে রাখা হলো
+                } catch (error) {
+                    // যদি ইন্টারনেট থাকে কিন্তু সার্ভার এরর হয়, তখন অফলাইন ডেটা খুঁজবে
+                    const cachedData = localStorage.getItem(cacheKey);
+                    if (cachedData) { data = JSON.parse(cachedData); document.getElementById("offline-alert").style.display = "block"; }
+                }
+            } else {
+                // ইন্টারনেট না থাকলে লোকাল স্টোরেজ থেকে ডেটা লোড করবে
+                const cachedData = localStorage.getItem(cacheKey);
+                if (cachedData) { 
+                    data = JSON.parse(cachedData); 
+                    document.getElementById("offline-alert").style.display = "block";
+                } else {
+                    document.getElementById("loading-spinner").style.display = "none";
+                    return alert("⚠️ ইন্টারনেট কানেকশন নেই এবং কোনো অফলাইন ডেটা সেভ করা নেই!");
+                }
+            }
+            
+            document.getElementById("loading-spinner").style.display = "none"; 
             
             let html = "";
             if(data.length === 0) {
                 html = "<p style='color:red; text-align:center;'>কোনো সাজেশন পাওয়া যায়নি!</p>";
             } else {
+                document.getElementById("search-box").style.display = "block";
+                document.getElementById("search-box").value = ""; 
+                
                 data.forEach((item, index) => {
-                    // প্রতিটি আইটেমের জন্য ইউনিক ফ্রেম আইডি
                     const frameId = 'frame-' + item.id + '-' + index;
-                    
+                    // টেক্সট নিরাপদে স্ট্রিং-এ রূপান্তর করা হচ্ছে
+                    const rawText = item.content_text ? item.content_text.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n') : '';
+
                     html += `<div class="suggestion-card">`;
                     
-                    // ১. প্রথমে টেক্সট (কমেন্ট) থাকবে
                     if (item.content_text) {
                         const safeText = item.content_text.replace(/</g, "&lt;").replace(/>/g, "&gt;"); 
                         if (safeText.length > 200) {
                             const shortText = safeText.substring(0, 200) + "...";
                             html += `
                                 <div style="margin-bottom: 10px;">
-                                    <p style="white-space: pre-wrap; margin: 0; color: #333; line-height: 1.5; font-size: 15px;">${shortText} 
+                                    <p style="white-space: pre-wrap; margin: 0; line-height: 1.5; font-size: 15px;">${shortText} 
                                         <span onclick="this.parentElement.style.display='none'; this.parentElement.nextElementSibling.style.display='block';" style="color:#007bff; cursor:pointer; font-weight:bold;">আরও পড়ুন</span>
                                     </p>
-                                    <p style="display:none; white-space: pre-wrap; margin: 0; color: #333; line-height: 1.5; font-size: 15px;">${safeText} 
+                                    <p style="display:none; white-space: pre-wrap; margin: 0; line-height: 1.5; font-size: 15px;">${safeText} 
                                         <span onclick="this.parentElement.style.display='none'; this.parentElement.previousElementSibling.style.display='block';" style="color:#dc3545; cursor:pointer; font-weight:bold;">ছোট করুন</span>
                                     </p>
                                 </div>
                             `;
                         } else {
-                            html += `<div style="margin-bottom: 10px;"><p style="white-space: pre-wrap; margin: 0; color: #333; line-height: 1.5; font-size: 15px;">${safeText}</p></div>`;
+                            html += `<div style="margin-bottom: 10px;"><p style="white-space: pre-wrap; margin: 0; line-height: 1.5; font-size: 15px;">${safeText}</p></div>`;
                         }
+                        
+                        // কপি এবং শেয়ার বাটন
+                        html += `
+                            <div>
+                                <button class="btn-small-action" onclick="copyText('${rawText}')">📋 কপি করুন</button>
+                                <button class="btn-small-action" onclick="shareContent('${rawText}', '${item.image_url || ''}')">📤 শেয়ার করুন</button>
+                            </div>
+                        `;
                     }
                     
-                    // ২. এরপর ফাইলের বাটনগুলো থাকবে
                     if (item.image_url) {
                         const fileUrlLower = item.image_url.toLowerCase();
-                        
                         if (fileUrlLower.includes('.pdf')) {
                             const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(item.image_url)}&embedded=true`;
                             html += `<div class="btn-action-container">
@@ -311,17 +412,19 @@
                                      </div>
                                      <div id="${frameId}" class="frame-container"></div>`;
                         } 
-                        else {
-                            html += `<img src="${item.image_url}">`;
+                        else { 
+                            html += `<img src="${item.image_url}" style="margin-top: 15px;">`; 
+                            // ইমেজের জন্য আলাদা শেয়ার বাটন (যদি টেক্সট না থাকে)
+                            if (!item.content_text) {
+                                html += `<div style="margin-top:10px;"><button class="btn-small-action" onclick="shareContent('', '${item.image_url}')">📤 শেয়ার করুন</button></div>`;
+                            }
                         }
                     }
                     
-                    // ৩. সর্বশেষে ডিলিট বাটন (শুধুমাত্র Admin এর জন্য)
                     if (loggedInUser === "mahim") {
                         html += `<hr style="border-top:1px solid #ccc; margin:15px 0 10px 0;">`;
                         html += `<button class="btn-delete" onclick="deleteSuggestion('${item.id}', '${item.image_url || ''}')">🗑️ ডিলিট করুন</button>`;
                     }
-                    
                     html += `</div>`;
                 });
             }
@@ -330,42 +433,23 @@
 
         async function deleteSuggestion(id, imageUrl) {
             if (loggedInUser !== "mahim") return; 
-
             const enteredPassword = prompt("ডিলিট করার জন্য এডমিন পাসওয়ার্ড দিন:");
-            if (enteredPassword !== MY_SECRET_PASSWORD) {
-                alert("পাসওয়ার্ড ভুল হয়েছে! আপনি এটি ডিলিট করতে পারবেন না।");
-                return;
-            }
-
+            if (enteredPassword !== MY_SECRET_PASSWORD) { alert("পাসওয়ার্ড ভুল হয়েছে! আপনি এটি ডিলিট করতে পারবেন না।"); return; }
             if (!confirm("তুমি কি নিশ্চিত যে এটি চিরতরে মুছে ফেলতে চাও?")) return;
 
-            
             try {
                 if (imageUrl) {
                     const fileName = imageUrl.split('/').pop();
-                    await fetch(`${supabaseUrl}/storage/v1/object/images/${fileName}`, {
-                        method: 'DELETE',
-                        headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
-                    });
+                    await fetch(`${supabaseUrl}/storage/v1/object/images/${fileName}`, { method: 'DELETE', headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` } });
                 }
-
-                const res = await fetch(`${supabaseUrl}/rest/v1/materials?id=eq.${id}`, {
-                    method: 'DELETE',
-                    headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
-                });
-
-                if (res.ok) {
-                    alert("সফলভাবে ডিলিট হয়েছে!");
-                    viewSuggestions(); 
-                } else {
-                    alert("ডিলিট করতে সমস্যা হয়েছে!");
-                }
-            } catch (error) {
-                alert("নেটওয়ার্ক এরর!");
-            }
+                const res = await fetch(`${supabaseUrl}/rest/v1/materials?id=eq.${id}`, { method: 'DELETE', headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` } });
+                if (res.ok) { alert("সফলভাবে ডিলিট হয়েছে!"); viewSuggestions(); } 
+                else { alert("ডিলিট করতে সমস্যা হয়েছে!"); }
+            
+                
+                 } catch (error) { alert("নেটওয়ার্ক এরর!"); }
         }
     </script>
 </body>
 </html>
 
-    
