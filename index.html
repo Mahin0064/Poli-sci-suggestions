@@ -88,8 +88,7 @@
     
     
     
-    
-  <div class="box" id="dashboard-section">
+   <div class="box" id="dashboard-section">
     <button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
     <h2>স্বাগতম!</h2>
     <select id="year-select" onchange="updateCourses()">
@@ -103,7 +102,7 @@
         <option value="">আগে বর্ষ সিলেক্ট করুন</option>
     </select>
 
-    <!-- নতুন বাটনসমূহ: হোয়াটসঅ্যাপ, ফেসবুক এবং লগআউট -->
+    <!-- নতুন বাটনসমূহ: হোয়াটসঅ্যাপ ও ফেসবুক -->
     <div style="display: flex; gap: 10px; margin-top: 15px;">
         <button style="flex: 1; background:#25d366; color:white; border:none; padding:8px; border-radius:5px; cursor:pointer;" 
                 onclick="window.open('https://wa.me/8801310978029', '_blank')">💬 WhatsApp</button>
@@ -111,8 +110,8 @@
                 onclick="window.open('https://www.facebook.com/Mahim064', '_blank')">👤 Facebook</button>
     </div>
 
-    <button style="background:#6c757d; color:white; margin-top:10px; width:100%; border:none; padding:8px; border-radius:5px; cursor:pointer;" 
-            onclick="logoutUser()">🚪 লগআউট</button>
+    <!-- এখন "সাজেশন দেখুন" বাটনটি এখানে চলে এসেছে -->
+    <button class="btn-view" style="width:100%; margin-top:10px;" onclick="viewSuggestions()">📂 সাজেশন দেখুন</button>
 
     <div class="divider"></div>
     
@@ -129,14 +128,20 @@
         <div class="divider"></div>
     </div>
 
-    <button class="btn-view" onclick="viewSuggestions()">সাজেশন দেখুন</button>
-    <p id="offline-alert">⚠️ ইন্টারনেট নেই! সেভ করা অফলাইন ডেটা দেখানো হচ্ছে।</p>
+    <!-- এখন লগআউট বাটনটি নিচে চলে এসেছে -->
+    <button style="background:#6c757d; color:white; margin-top:10px; width:100%; border:none; padding:8px; border-radius:5px; cursor:pointer;" 
+            onclick="logoutUser()">🚪 লগআউট</button>
+
+    <p id="offline-alert" style="margin-top:10px;">⚠️ ইন্টারনেট নেই! সেভ করা অফলাইন ডেটা দেখানো হচ্ছে।</p>
     
     <input type="text" id="search-box" placeholder="🔍 নির্দিষ্ট সাজেশন খুঁজুন..." onkeyup="searchSuggestions()">
     <div class="loader" id="loading-spinner"></div>
     <div id="suggestions-list"></div>
 </div>
-  
+
+   
+   
+   
     
     
     
