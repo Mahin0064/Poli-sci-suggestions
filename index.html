@@ -469,12 +469,12 @@
                     }
 
                     // ডাউনলোড বাটন
-                    html += `
+                   /* html += `
                         <div style="margin-top:10px;">
                             <button class="btn-small-action" style="background:#28a745; color:white;" onclick="downloadSuggestion('${rawText}', '${item.image_url || ''}')">⬇️ ডাউনলোড করুন</button>
                         </div>
                     `;
-                    
+                    */
                     if (loggedInUser === "mahim") {
                         html += `<hr style="border-top:1px solid #e2e8f0; margin:15px 0 10px 0;">`;
                         html += `<button class="btn-small-action" style="background:#ffc107; color:#000;" onclick="prepareUpdate('${item.id}', decodeURIComponent('${encodeURIComponent(item.content_text || '')}'))">✏️ আপডেট করুন</button> `;
