@@ -106,8 +106,8 @@
     <div style="display: flex; gap: 10px; margin-top: 15px;">
         <button style="flex: 1; background:#25d366; color:white; border:none; padding:8px; border-radius:5px; cursor:pointer;" 
                 onclick="window.open('https://wa.me/8801310978029', '_blank')">💬 WhatsApp</button>
-        <button style="flex: 1; background:#1877f2; color:white; border:none; padding:8px; border-radius:5px; cursor:pointer;" 
-                onclick="window.open('https://www.facebook.com/Mahim064', '_blank')">👤 Facebook</button>
+   <button style="flex: 1; background:#1877f2; color:white; border:none; padding:8px; border-radius:5px; cursor:pointer;" 
+                onclick="window.open('https://m.me/Mahim064?hash=Abb0cO1z8GGWV90S&source=qr', '_blank')">👤 Messenger</button>
     </div>
 
     <!-- এখন "সাজেশন দেখুন" বাটনটি এখানে চলে এসেছে -->
@@ -141,13 +141,6 @@
 
    
    
-   
-    
-    
-    
-    
-    
-    
     
 
     <script>
@@ -246,10 +239,7 @@
                 }, delay);
             }
         }
-
-      
-    
-    
+   
  function logoutUser() {
     if (confirm("আপনি কি নিশ্চিত যে লগআউট করতে চান?")) {
         localStorage.removeItem("loggedInUser");
@@ -265,15 +255,6 @@
         window.history.pushState(null, null, window.location.href);
     }
 }
-   
-    
-    
-    
-    
-    
-    
-    
-    
 
         function updateCourses() {
             const year = document.getElementById("year-select").value;
@@ -361,7 +342,7 @@
                     let finalContentType = file.type || 'application/octet-stream';
                     if (safeFileName.toLowerCase().endsWith('.html')) finalContentType = 'text/html; charset=utf-8';
                     else if (safeFileName.toLowerCase().endsWith('.txt')) finalContentType = 'text/plain; charset=utf-8';
-                    
+
                     const res = await fetch(`${supabaseUrl}/storage/v1/object/images/${fileName}`, { 
                         method: 'POST', headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': finalContentType }, body: file 
                     });
@@ -370,12 +351,7 @@
                 }
 
                 let method = updateId ? 'PATCH' : 'POST';
-                let endpoint = updateId ? `${supabaseUrl}/rest/v1/materials?id=eq.${updateId}` : `${supabaseUrl}/rest/v1/materials`;
-                
-                
-                
-                
-                
+                let endpoint = updateId ? `${supabaseUrl}/rest/v1/materials?id=eq.${updateId}` : `${supabaseUrl}/rest/v1/materials`;              
                 let bodyData = { year, course_name: course, content_text: text };
                 if (fileUrl) bodyData.image_url = fileUrl; 
 
@@ -451,9 +427,7 @@
                     document.getElementById("loading-spinner").style.display = "none";
                     return alert("⚠️ ইন্টারনেট কানেকশন নেই এবং কোনো অফলাইন ডেটা সেভ করা নেই!");
                 }
-            }
-            
-            document.getElementById("loading-spinner").style.display = "none"; 
+            }           document.getElementById("loading-spinner").style.display = "none"; 
             
             let html = "";
             if(data.length === 0) {
@@ -510,28 +484,7 @@
                         }
                     }
 
-                    // ডাউনলোড বাটন
-                    /*html += `
-                        <div style="margin-top:10px;">
-                            <button class="btn-small-action" style="background:#28a745; color:white;" onclick="downloadSuggestion('${rawText}', '${item.image_url || ''}')">⬇️ ডাউনলোড করুন</button>
-                        </div>
-                    `;
-                    */
-                    
-                    
- 
-                    
- /*html += `
-    <div style="margin-top:10px;">
-        <button class="btn-small-action" 
-                style="background:#25d366; color:white; border:none; cursor:pointer; padding: 8px 12px; border-radius: 5px;" 
-                onclick="window.open('https://wa.me/8801310978029', '_blank')">
-            💬 WhatsApp-এ যোগাযোগ
-        </button>
-    </div>
-`;
-   */                
-                    
+                   
                     
                     
                     
@@ -568,3 +521,5 @@
     </script>
 </body>
 </html>
+                    
+                    
