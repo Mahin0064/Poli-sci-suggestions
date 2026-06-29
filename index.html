@@ -16,32 +16,35 @@
         .btn-view { background: #6f42c1; }
         .btn-upload { background: #dc3545; }
         .btn-delete { background: #ff4d4d; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-top: 10px; width: auto; }
+        .btn-cancel { background: #6c757d; color: white; margin-top: 5px; display: none; }
         
-        /* ছোট শেয়ার ও কপি বাটন */
+        /* ছোট অ্যাকশন বাটন */
         .btn-small-action { background: #e0e0e0; color: #333; padding: 6px 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; margin-right: 5px; margin-top: 10px; font-weight: bold; transition: 0.3s; width: auto; display: inline-block; }
         .btn-small-action:hover { background: #d0d0d0; }
         
-        /* স্প্ল্যাশ স্ক্রিন (Splash Screen) */
+        /* স্প্ল্যাশ স্ক্রিন */
         #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #6f42c1; color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease; }
         #splash-screen h1 { font-size: 28px; margin-bottom: 10px; }
         
         #auth-section, #dashboard-section { display: none; }
         .divider { margin: 20px 0; border-top: 1px solid #ddd; }
         
-        .suggestion-card { background: #e9ecef; padding: 15px; border-radius: 5px; margin-bottom: 15px; border-left: 4px solid #6f42c1; text-align: left; transition: 0.3s; }
+        /* সাজেশন ব্লক ডিজাইন */
+        .suggestion-card { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid #6f42c1; border-top: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.08); text-align: left; transition: 0.3s; }
         .suggestion-card img { max-width: 100%; margin-top: 10px; border-radius: 5px; }
         .file-upload-wrapper { margin: 10px 0; text-align: left; padding: 0 5%; }
         
-        .btn-action-container { display: flex; justify-content: space-between; gap: 10px; margin-top: 15px; }
+        .btn-action-container { display: flex; justify-content: space-between; gap: 10px; margin-top: 15px; background: #e9ecef; padding: 10px; border-radius: 6px; }
         .btn-preview { background: #17a2b8; color: white; padding: 8px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; flex: 1; font-size: 14px; }
         .btn-fullscreen { background: #28a745; color: white; padding: 8px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; text-align: center; text-decoration: none; flex: 1; font-size: 14px; box-sizing: border-box; display: inline-block; }
         .frame-container iframe { width: 100%; height: 350px; border: 1px solid #ccc; border-radius: 5px; margin-top: 10px; background: white; }
 
-        /* ডার্ক মোড (Dark Mode) */
+        /* ডার্ক মোড */
         body.dark-mode { background-color: #121212; color: #ffffff; }
         body.dark-mode .box { background: #1e1e1e; color: #ffffff; box-shadow: 0 4px 10px rgba(255,255,255,0.05); }
         body.dark-mode input, body.dark-mode select, body.dark-mode textarea { background: #333; color: white; border-color: #555; }
-        body.dark-mode .suggestion-card { background: #2d2d2d; color: white; border-left: 4px solid #bb86fc; }
+        body.dark-mode .suggestion-card { background: #262626; border-color: #333; color: white; border-left: 5px solid #bb86fc; }
+        body.dark-mode .btn-action-container { background: #333; }
         body.dark-mode .suggestion-card p, body.dark-mode .suggestion-card span { color: #ddd !important; }
         body.dark-mode .divider { border-top: 1px solid #444; }
         body.dark-mode .dev-text { color: #aaa !important; border-top-color: #444 !important; }
@@ -54,7 +57,6 @@
         .loader { border: 4px solid #f3f3f3; border-top: 4px solid #6f42c1; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* সার্চ বক্স */
         #search-box { display: none; width: 90%; padding: 10px; margin-top: 15px; border-radius: 20px; border: 1px solid #ccc; font-size: 15px; text-align: center; }
         #offline-alert { display: none; color: #dc3545; font-size: 13px; font-weight: bold; margin-top: 10px; }
     </style>
@@ -97,13 +99,14 @@
         <div class="divider"></div>
         
         <div id="admin-upload-section" style="display: none;">
-            <h3 style="color: #dc3545; margin-bottom: 5px; font-size: 16px;">সাজেশন যোগ করুন (Admin)</h3>
+            <h3 style="color: #dc3545; margin-bottom: 5px; font-size: 16px;">সাজেশন যোগ/আপডেট করুন</h3>
             <textarea id="suggestion-text" rows="3" placeholder="সাজেশন বা মন্তব্য লেখো..."></textarea>
             <div class="file-upload-wrapper">
                 <label style="font-size:14px; font-weight:bold;">ছবি বা ফাইল (PDF, HTML, TXT):</label>
                 <input type="file" id="suggestion-file" accept="image/*, application/pdf, .html, .txt">
             </div>
-            <button class="btn-upload" onclick="uploadData()">সাজেশন সেভ করুন</button>
+            <button id="btn-submit" class="btn-upload" onclick="uploadData()">সাজেশন সেভ করুন</button>
+            <button id="btn-cancel" class="btn-cancel" onclick="cancelUpdate()">❌ বাতিল করুন</button>
             <p id="upload-msg" style="font-size: 14px; font-weight: bold;"></p>
             <div class="divider"></div>
         </div>
@@ -116,13 +119,13 @@
         <div id="suggestions-list"></div>
     </div>
 
-    
-        <script>
+    <script>
         const supabaseUrl = 'https://fmaupjtupbfbsekrrrip.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtYXVwanR1cGJmYnNla3JycmlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1NjU5MjAsImV4cCI6MjA5ODE0MTkyMH0.S_hzuZNQB8Kfw1BHwRMQChjJClo1E4RvyrQKBRBFe7I';
 
         const MY_SECRET_PASSWORD = "প্রফেসর";
         let loggedInUser = ""; 
+        let updateId = null;
 
         const courseData = {
             "1st": ["Introduction to Political Science", "Political History of Bengal", "Major Foreign Governments"],
@@ -131,18 +134,33 @@
             "4th": ["Modern Political Thought", "Local Government & Rural Development", "Public Policy", "International Law"]
         };
 
-        // স্প্ল্যাশ স্ক্রিন (Splash Screen) কন্ট্রোল
         window.onload = function() {
+            const storedUser = localStorage.getItem("loggedInUser");
+            const loginTime = localStorage.getItem("loginTime");
+            const twelveHours = 12 * 60 * 60 * 1000;
+            const now = Date.now();
+
             setTimeout(function() {
                 document.getElementById('splash-screen').style.opacity = '0';
                 setTimeout(function() {
                     document.getElementById('splash-screen').style.display = 'none';
-                    document.getElementById('auth-section').style.display = 'block';
+                    
+                    if (storedUser && loginTime && (now - loginTime < twelveHours)) {
+                        loggedInUser = storedUser;
+                        document.getElementById('auth-section').style.display = 'none';
+                        document.getElementById('dashboard-section').style.display = 'block';
+                        if (loggedInUser === "mahim") { 
+                            document.getElementById("admin-upload-section").style.display = "block"; 
+                        }
+                    } else {
+                        localStorage.removeItem("loggedInUser");
+                        localStorage.removeItem("loginTime");
+                        document.getElementById('auth-section').style.display = 'block';
+                    }
                 }, 500); 
             }, 2000); 
         };
 
-        // ডার্ক মোড কন্ট্রোল
         function toggleDarkMode() {
             document.body.classList.toggle("dark-mode");
             const btns = document.querySelectorAll('.dark-toggle');
@@ -153,11 +171,9 @@
             }
         }
 
-        // সার্চ বক্স কন্ট্রোল
         function searchSuggestions() {
             let filter = document.getElementById('search-box').value.toLowerCase();
             let cards = document.getElementsByClassName('suggestion-card');
-            
             for (let i = 0; i < cards.length; i++) {
                 let text = cards[i].innerText.toLowerCase();
                 if (text.includes(filter)) {
@@ -168,25 +184,35 @@
             }
         }
 
-        // টেক্সট কপি করার ফাংশন
-        function copyText(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert("✅ টেক্সট কপি করা হয়েছে!");
-            }).catch(err => {
-                alert("কপি করতে সমস্যা হয়েছে!");
-            });
-        }
+        // আপডেটেড ডাউনলোড ফাংশন
+        function downloadSuggestion(text, imageUrl) {
+            let delay = 0;
 
-        // শেয়ার করার ফাংশন (Web Share API)
-        function shareContent(text, url) {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'রাষ্ট্রবিজ্ঞান সাজেশন',
-                    text: text ? text.substring(0, 100) + "...\n\n" : "এখানে একটি সাজেশন শেয়ার করা হয়েছে!\n",
-                    url: url || window.location.href
-                }).catch(err => console.log("Share failed:", err));
-            } else {
-                alert("আপনার ব্রাউজারে শেয়ার অপশন সাপোর্ট করে না!");
+            // ১. যদি টেক্সট থাকে, তবে সেটি .txt হিসেবে ডাউনলোড হবে
+            if (text && text.trim() !== "") {
+                const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+                const a = document.createElement("a");
+                a.href = URL.createObjectURL(blob);
+                a.download = `suggestion_text_${Date.now()}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(a.href);
+                delay = 500; // ফাইল থাকলে সেটি আধা সেকেন্ড পরে ডাউনলোড হবে
+            }
+
+            // ২. যদি ফাইল বা ছবি থাকে, তবে Supabase এর ?download ফিচার ব্যবহার করা হবে
+            if (imageUrl) {
+                setTimeout(() => {
+                    const downloadUrl = imageUrl.includes('?') ? `${imageUrl}&download=` : `${imageUrl}?download=`;
+                    const a = document.createElement('a');
+                    a.href = downloadUrl;
+                    a.download = imageUrl.split('/').pop() || `file_${Date.now()}`;
+                    a.target = "_blank"; // কিছু ব্রাউজারের সিকিউরিটির জন্য
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                }, delay);
             }
         }
 
@@ -196,6 +222,8 @@
                 if (!exit) {
                     history.pushState(null, null, window.location.href); 
                 } else {
+                    localStorage.removeItem("loggedInUser");
+                    localStorage.removeItem("loginTime");
                     document.getElementById("dashboard-section").style.display = "none";
                     document.getElementById("auth-section").style.display = "block";
                     document.getElementById("search-box").style.display = "none";
@@ -227,6 +255,9 @@
             const res = await fetch(`${supabaseUrl}/auth/v1/token?grant_type=password`, { method: 'POST', headers: { 'apikey': supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify({ email: user.toLowerCase() + "@polsci.app", password: pass }) });
             if (res.ok) { 
                 loggedInUser = user.toLowerCase(); 
+                localStorage.setItem("loggedInUser", loggedInUser);
+                localStorage.setItem("loginTime", Date.now());
+
                 document.getElementById("auth-section").style.display = "none"; 
                 document.getElementById("dashboard-section").style.display = "block"; 
                 if (loggedInUser === "mahim") { document.getElementById("admin-upload-section").style.display = "block"; } 
@@ -244,16 +275,43 @@
              if (res.ok) showMsg("auth-msg", "একাউন্ট তৈরি হয়েছে!", "green"); else showMsg("auth-msg", "এরর হয়েছে!", "red");
         }
 
+        function prepareUpdate(id, text) {
+            updateId = id;
+            document.getElementById("suggestion-text").value = text;
+            document.getElementById("admin-upload-section").scrollIntoView({ behavior: 'smooth' });
+            
+            const btnSubmit = document.getElementById("btn-submit");
+            btnSubmit.innerText = "সাজেশন আপডেট করুন";
+            btnSubmit.style.background = "#ffc107";
+            btnSubmit.style.color = "#000";
+            
+            document.getElementById("btn-cancel").style.display = "inline-block";
+        }
+
+        function cancelUpdate() {
+            updateId = null;
+            document.getElementById("suggestion-text").value = "";
+            document.getElementById("suggestion-file").value = "";
+            
+            const btnSubmit = document.getElementById("btn-submit");
+            btnSubmit.innerText = "সাজেশন সেভ করুন";
+            btnSubmit.style.background = "#dc3545";
+            btnSubmit.style.color = "#fff";
+            
+            document.getElementById("btn-cancel").style.display = "none";
+            showMsg("upload-msg", "", "black");
+        }
+
         async function uploadData() {
             if (loggedInUser !== "mahim") return; 
             const year = document.getElementById("year-select").value;
             const course = document.getElementById("course-select").value;
             const text = document.getElementById("suggestion-text").value;
             const file = document.getElementById("suggestion-file").files[0];
-            let fileUrl = "";
+            let fileUrl = null;
 
             if (!year || !course) return showMsg("upload-msg", "বর্ষ ও কোর্স সিলেক্ট করুন!", "red");
-            showMsg("upload-msg", "আপলোড হচ্ছে...", "blue");
+            showMsg("upload-msg", updateId ? "আপডেট হচ্ছে..." : "আপলোড হচ্ছে...", "blue");
 
             try {
                 if (file) {
@@ -270,14 +328,25 @@
                     else { return showMsg("upload-msg", "ফাইল আপলোডে সমস্যা!", "red"); }
                 }
 
-                const dbRes = await fetch(`${supabaseUrl}/rest/v1/materials`, { 
-                    method: 'POST', headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, 
-                    body: JSON.stringify({ year, course_name: course, content_text: text, image_url: fileUrl }) 
+                let method = updateId ? 'PATCH' : 'POST';
+                let endpoint = updateId ? `${supabaseUrl}/rest/v1/materials?id=eq.${updateId}` : `${supabaseUrl}/rest/v1/materials`;
+                
+                
+                
+                
+                let bodyData = { year, course_name: course, content_text: text };
+                if (fileUrl) bodyData.image_url = fileUrl; 
+
+                const dbRes = await fetch(endpoint, { 
+                    method: method, 
+                    headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, 
+                    body: JSON.stringify(bodyData) 
                 });
+                
                 if (dbRes.ok) {
-                    showMsg("upload-msg", "সফলভাবে সেভ হয়েছে!", "green");
-                    document.getElementById("suggestion-text").value = "";
-                    document.getElementById("suggestion-file").value = "";
+                    showMsg("upload-msg", updateId ? "সফলভাবে আপডেট হয়েছে!" : "সফলভাবে সেভ হয়েছে!", "green");
+                    cancelUpdate();
+                    viewSuggestions(); 
                 } else { showMsg("upload-msg", "সেভ করতে সমস্যা!", "red"); }
             } catch (error) { showMsg("upload-msg", "নেটওয়ার্ক এরর!", "red"); }
         }
@@ -297,7 +366,7 @@
 
         async function openFullScreenContent(url, type) {
             const newTab = window.open('', '_blank');
-            if (!newTab) { alert("দয়া করে আপনার ব্রাউজারের পপ-আপ ব্লকার (Pop-up Blocker) বন্ধ করুন!"); return; }
+            if (!newTab) { alert("দয়া করে আপনার ব্রাউজারের পপ-আপ ব্লকার বন্ধ করুন!"); return; }
             newTab.document.write("<h3 style='font-family:sans-serif; color:blue; text-align:center; margin-top:50px;'>লোড হচ্ছে...</h3>");
             try {
                 const response = await fetch(url);
@@ -322,19 +391,16 @@
             const cacheKey = `suggestions_${year}_${course}`;
             let data = [];
 
-            // অফলাইন/অনলাইন চেক করা হচ্ছে
             if (navigator.onLine) {
                 try {
                     const res = await fetch(`${supabaseUrl}/rest/v1/materials?year=eq.${year}&course_name=eq.${encodeURIComponent(course)}&select=*`, { headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` } });
                     data = await res.json();
-                    localStorage.setItem(cacheKey, JSON.stringify(data)); // অফলাইনের জন্য সেভ করে রাখা হলো
+                    localStorage.setItem(cacheKey, JSON.stringify(data)); 
                 } catch (error) {
-                    // যদি ইন্টারনেট থাকে কিন্তু সার্ভার এরর হয়, তখন অফলাইন ডেটা খুঁজবে
                     const cachedData = localStorage.getItem(cacheKey);
                     if (cachedData) { data = JSON.parse(cachedData); document.getElementById("offline-alert").style.display = "block"; }
                 }
             } else {
-                // ইন্টারনেট না থাকলে লোকাল স্টোরেজ থেকে ডেটা লোড করবে
                 const cachedData = localStorage.getItem(cacheKey);
                 if (cachedData) { 
                     data = JSON.parse(cachedData); 
@@ -356,7 +422,6 @@
                 
                 data.forEach((item, index) => {
                     const frameId = 'frame-' + item.id + '-' + index;
-                    // টেক্সট নিরাপদে স্ট্রিং-এ রূপান্তর করা হচ্ছে
                     const rawText = item.content_text ? item.content_text.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n') : '';
 
                     html += `<div class="suggestion-card">`;
@@ -378,14 +443,6 @@
                         } else {
                             html += `<div style="margin-bottom: 10px;"><p style="white-space: pre-wrap; margin: 0; line-height: 1.5; font-size: 15px;">${safeText}</p></div>`;
                         }
-                        
-                        // কপি এবং শেয়ার বাটন
-                        html += `
-                            <div>
-                                <button class="btn-small-action" onclick="copyText('${rawText}')">📋 কপি করুন</button>
-                                <button class="btn-small-action" onclick="shareContent('${rawText}', '${item.image_url || ''}')">📤 শেয়ার করুন</button>
-                            </div>
-                        `;
                     }
                     
                     if (item.image_url) {
@@ -398,31 +455,29 @@
                                      </div>
                                      <div id="${frameId}" class="frame-container"></div>`;
                         } 
-                        else if (fileUrlLower.includes('.html')) {
+                        else if (fileUrlLower.includes('.html') || fileUrlLower.includes('.txt')) {
+                            const fileType = fileUrlLower.includes('.html') ? 'html' : 'txt';
                             html += `<div class="btn-action-container">
-                                        <button onclick="loadContent('${frameId}', '${item.image_url}', 'html')" class="btn-preview">Preview</button>
-                                        <button onclick="openFullScreenContent('${item.image_url}', 'html')" class="btn-fullscreen">Fullscreen</button>
-                                     </div>
-                                     <div id="${frameId}" class="frame-container"></div>`;
-                        } 
-                        else if (fileUrlLower.includes('.txt')) {
-                            html += `<div class="btn-action-container">
-                                        <button onclick="loadContent('${frameId}', '${item.image_url}', 'txt')" class="btn-preview">Preview</button>
-                                        <button onclick="openFullScreenContent('${item.image_url}', 'txt')" class="btn-fullscreen">Fullscreen</button>
+                                        <button onclick="loadContent('${frameId}', '${item.image_url}', '${fileType}')" class="btn-preview">Preview</button>
+                                        <button onclick="openFullScreenContent('${item.image_url}', '${fileType}')" class="btn-fullscreen">Fullscreen</button>
                                      </div>
                                      <div id="${frameId}" class="frame-container"></div>`;
                         } 
                         else { 
                             html += `<img src="${item.image_url}" style="margin-top: 15px;">`; 
-                            // ইমেজের জন্য আলাদা শেয়ার বাটন (যদি টেক্সট না থাকে)
-                            if (!item.content_text) {
-                                html += `<div style="margin-top:10px;"><button class="btn-small-action" onclick="shareContent('', '${item.image_url}')">📤 শেয়ার করুন</button></div>`;
-                            }
                         }
                     }
+
+                    // ডাউনলোড বাটন
+                    html += `
+                        <div style="margin-top:10px;">
+                            <button class="btn-small-action" style="background:#28a745; color:white;" onclick="downloadSuggestion('${rawText}', '${item.image_url || ''}')">⬇️ ডাউনলোড করুন</button>
+                        </div>
+                    `;
                     
                     if (loggedInUser === "mahim") {
-                        html += `<hr style="border-top:1px solid #ccc; margin:15px 0 10px 0;">`;
+                        html += `<hr style="border-top:1px solid #e2e8f0; margin:15px 0 10px 0;">`;
+                        html += `<button class="btn-small-action" style="background:#ffc107; color:#000;" onclick="prepareUpdate('${item.id}', decodeURIComponent('${encodeURIComponent(item.content_text || '')}'))">✏️ আপডেট করুন</button> `;
                         html += `<button class="btn-delete" onclick="deleteSuggestion('${item.id}', '${item.image_url || ''}')">🗑️ ডিলিট করুন</button>`;
                     }
                     html += `</div>`;
@@ -445,11 +500,9 @@
                 const res = await fetch(`${supabaseUrl}/rest/v1/materials?id=eq.${id}`, { method: 'DELETE', headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` } });
                 if (res.ok) { alert("সফলভাবে ডিলিট হয়েছে!"); viewSuggestions(); } 
                 else { alert("ডিলিট করতে সমস্যা হয়েছে!"); }
-            
-                
-                 } catch (error) { alert("নেটওয়ার্ক এরর!"); }
+            } catch (error) { alert("নেটওয়ার্ক এরর!"); }
         }
     </script>
 </body>
 </html>
-
+                
