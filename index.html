@@ -83,41 +83,67 @@
         </div>
     </div>
 
-    <div class="box" id="dashboard-section">
-        <button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
-        <h2>স্বাগতম!</h2>
-        <select id="year-select" onchange="updateCourses()">
-            <option value="">বর্ষ সিলেক্ট করুন</option>
-            <option value="1st">প্রথম বর্ষ</option>
-            <option value="2nd">দ্বিতীয় বর্ষ</option>
-            <option value="3rd">তৃতীয় বর্ষ</option>
-            <option value="4th">চতুর্থ বর্ষ</option>
-        </select>
-        <select id="course-select">
-            <option value="">আগে বর্ষ সিলেক্ট করুন</option>
-        </select>
-        <div class="divider"></div>
-        
-        <div id="admin-upload-section" style="display: none;">
-            <h3 style="color: #dc3545; margin-bottom: 5px; font-size: 16px;">সাজেশন যোগ/আপডেট করুন</h3>
-            <textarea id="suggestion-text" rows="3" placeholder="সাজেশন বা মন্তব্য লেখো..."></textarea>
-            <div class="file-upload-wrapper">
-                <label style="font-size:14px; font-weight:bold;">ছবি বা ফাইল (PDF, HTML, TXT):</label>
-                <input type="file" id="suggestion-file" accept="image/*, application/pdf, .html, .txt">
-            </div>
-            <button id="btn-submit" class="btn-upload" onclick="uploadData()">সাজেশন সেভ করুন</button>
-            <button id="btn-cancel" class="btn-cancel" onclick="cancelUpdate()">❌ বাতিল করুন</button>
-            <p id="upload-msg" style="font-size: 14px; font-weight: bold;"></p>
-            <div class="divider"></div>
-        </div>
+ 
+    
+    
+    
+    
+    
+  <div class="box" id="dashboard-section">
+    <button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
+    <h2>স্বাগতম!</h2>
+    <select id="year-select" onchange="updateCourses()">
+        <option value="">বর্ষ সিলেক্ট করুন</option>
+        <option value="1st">প্রথম বর্ষ</option>
+        <option value="2nd">দ্বিতীয় বর্ষ</option>
+        <option value="3rd">তৃতীয় বর্ষ</option>
+        <option value="4th">চতুর্থ বর্ষ</option>
+    </select>
+    <select id="course-select">
+        <option value="">আগে বর্ষ সিলেক্ট করুন</option>
+    </select>
 
-        <button class="btn-view" onclick="viewSuggestions()">সাজেশন দেখুন</button>
-        <p id="offline-alert">⚠️ ইন্টারনেট নেই! সেভ করা অফলাইন ডেটা দেখানো হচ্ছে।</p>
-        
-        <input type="text" id="search-box" placeholder="🔍 নির্দিষ্ট সাজেশন খুঁজুন..." onkeyup="searchSuggestions()">
-        <div class="loader" id="loading-spinner"></div>
-        <div id="suggestions-list"></div>
+    <!-- নতুন বাটনসমূহ: হোয়াটসঅ্যাপ, ফেসবুক এবং লগআউট -->
+    <div style="display: flex; gap: 10px; margin-top: 15px;">
+        <button style="flex: 1; background:#25d366; color:white; border:none; padding:8px; border-radius:5px; cursor:pointer;" 
+                onclick="window.open('https://wa.me/8801310978029', '_blank')">💬 WhatsApp</button>
+        <button style="flex: 1; background:#1877f2; color:white; border:none; padding:8px; border-radius:5px; cursor:pointer;" 
+                onclick="window.open('https://www.facebook.com/Mahim064', '_blank')">👤 Facebook</button>
     </div>
+
+    <button style="background:#6c757d; color:white; margin-top:10px; width:100%; border:none; padding:8px; border-radius:5px; cursor:pointer;" 
+            onclick="logoutUser()">🚪 লগআউট</button>
+
+    <div class="divider"></div>
+    
+    <div id="admin-upload-section" style="display: none;">
+        <h3 style="color: #dc3545; margin-bottom: 5px; font-size: 16px;">সাজেশন যোগ/আপডেট করুন</h3>
+        <textarea id="suggestion-text" rows="3" placeholder="সাজেশন বা মন্তব্য লেখো..."></textarea>
+        <div class="file-upload-wrapper">
+            <label style="font-size:14px; font-weight:bold;">ছবি বা ফাইল (PDF, HTML, TXT):</label>
+            <input type="file" id="suggestion-file" accept="image/*, application/pdf, .html, .txt">
+        </div>
+        <button id="btn-submit" class="btn-upload" onclick="uploadData()">সাজেশন সেভ করুন</button>
+        <button id="btn-cancel" class="btn-cancel" style="display:none; background:#6c757d; color:white; width:95%; border:none; padding:10px; border-radius:5px; cursor:pointer; margin-top:5px;" onclick="cancelUpdate()">❌ বাতিল করুন</button>
+        <p id="upload-msg" style="font-size: 14px; font-weight: bold;"></p>
+        <div class="divider"></div>
+    </div>
+
+    <button class="btn-view" onclick="viewSuggestions()">সাজেশন দেখুন</button>
+    <p id="offline-alert">⚠️ ইন্টারনেট নেই! সেভ করা অফলাইন ডেটা দেখানো হচ্ছে।</p>
+    
+    <input type="text" id="search-box" placeholder="🔍 নির্দিষ্ট সাজেশন খুঁজুন..." onkeyup="searchSuggestions()">
+    <div class="loader" id="loading-spinner"></div>
+    <div id="suggestions-list"></div>
+</div>
+  
+    
+    
+    
+    
+    
+    
+    
 
     <script>
         const supabaseUrl = 'https://fmaupjtupbfbsekrrrip.supabase.co';
@@ -216,23 +242,33 @@
             }
         }
 
-        window.addEventListener("popstate", function(event) {
-            if (document.getElementById("dashboard-section").style.display === "block") {
-                const exit = confirm("তুমি কি লগআউট করে বের হতে চাও?");
-                if (!exit) {
-                    history.pushState(null, null, window.location.href); 
-                } else {
-                    localStorage.removeItem("loggedInUser");
-                    localStorage.removeItem("loginTime");
-                    document.getElementById("dashboard-section").style.display = "none";
-                    document.getElementById("auth-section").style.display = "block";
-                    document.getElementById("search-box").style.display = "none";
-                    document.getElementById("suggestions-list").innerHTML = "";
-                    document.getElementById("offline-alert").style.display = "none";
-                    loggedInUser = ""; 
-                }
-            }
-        });
+      
+    
+    
+ function logoutUser() {
+    if (confirm("আপনি কি নিশ্চিত যে লগআউট করতে চান?")) {
+        localStorage.removeItem("loggedInUser");
+        localStorage.removeItem("loginTime");
+        
+        document.getElementById("dashboard-section").style.display = "none";
+        document.getElementById("auth-section").style.display = "block";
+        document.getElementById("search-box").style.display = "none";
+        document.getElementById("suggestions-list").innerHTML = "";
+        document.getElementById("offline-alert").style.display = "none";
+        loggedInUser = "";
+        
+        window.history.pushState(null, null, window.location.href);
+    }
+}
+   
+    
+    
+    
+    
+    
+    
+    
+    
 
         function updateCourses() {
             const year = document.getElementById("year-select").value;
@@ -330,6 +366,7 @@
 
                 let method = updateId ? 'PATCH' : 'POST';
                 let endpoint = updateId ? `${supabaseUrl}/rest/v1/materials?id=eq.${updateId}` : `${supabaseUrl}/rest/v1/materials`;
+                
                 
                 
                 
@@ -469,12 +506,33 @@
                     }
 
                     // ডাউনলোড বাটন
-                   /* html += `
+                    /*html += `
                         <div style="margin-top:10px;">
                             <button class="btn-small-action" style="background:#28a745; color:white;" onclick="downloadSuggestion('${rawText}', '${item.image_url || ''}')">⬇️ ডাউনলোড করুন</button>
                         </div>
                     `;
                     */
+                    
+                    
+ 
+                    
+ /*html += `
+    <div style="margin-top:10px;">
+        <button class="btn-small-action" 
+                style="background:#25d366; color:white; border:none; cursor:pointer; padding: 8px 12px; border-radius: 5px;" 
+                onclick="window.open('https://wa.me/8801310978029', '_blank')">
+            💬 WhatsApp-এ যোগাযোগ
+        </button>
+    </div>
+`;
+   */                
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     if (loggedInUser === "mahim") {
                         html += `<hr style="border-top:1px solid #e2e8f0; margin:15px 0 10px 0;">`;
                         html += `<button class="btn-small-action" style="background:#ffc107; color:#000;" onclick="prepareUpdate('${item.id}', decodeURIComponent('${encodeURIComponent(item.content_text || '')}'))">✏️ আপডেট করুন</button> `;
@@ -505,4 +563,3 @@
     </script>
 </body>
 </html>
-                
