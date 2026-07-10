@@ -366,7 +366,7 @@ body.dark-mode .btn-download-icon:hover { background: #28a745; color: white; bor
                 data.forEach((item, index) => {
                     const frameId = 'frame-' + item.id + '-' + index;
                     html += `<div class="suggestion-card">`;
-                    html += `<button class="btn-download-icon" onclick="downloadSuggestion(decodeURIComponent('${encodeURIComponent(item.content_text || '')}'), '${item.image_url || ''}')" title="সরাসরি ডাউনলোড করুন">📥</button>`;
+                   // html += `<button class="btn-download-icon" onclick="downloadSuggestion(decodeURIComponent('${encodeURIComponent(item.content_text || '')}'), '${item.image_url || ''}')" title="সরাসরি ডাউনলোড করুন">📥</button>`;
                     
                     if (item.content_text) {
                         const safeText = item.content_text.replace(/</g, "&lt;").replace(/>/g, "&gt;"); 
